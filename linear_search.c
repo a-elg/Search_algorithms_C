@@ -64,6 +64,7 @@ int main (int argc, char* argv[]){
 	//ALGORITMO	
 	//Llamada a la función del algoritmo
     result = linear_search(A, tam, x);
+    //Valida el resultado para saber si se encontró o no el número
     (result == -1)
         ? printf("El elemento no se encunetra en el arreglo")
         : printf("El elemento se encunetra en el indice: \t %d", result);
@@ -71,11 +72,7 @@ int main (int argc, char* argv[]){
 	//EVALUAR LOS TIEMPOS DE EJECUCIÓN 
 	uswtime(&utime1, &stime1, &wtime1);
 
-	//Comprobar números ordenados (imprimir A ordenado)
-	/*for (i = 0; i < numero; i++)
-		printf("%d\n", A[i]);
-	
-	//Cálculo del tiempo de ejecución del programa
+	/*Cálculo del tiempo de ejecución del programa
 	printf("\n");
 	printf("real (Tiempo total)  %.10f s\n",  wtime1 - wtime0);
 	printf("user (Tiempo de procesamiento en CPU) %.10f s\n",  utime1 - utime0);
@@ -105,7 +102,9 @@ int main (int argc, char* argv[]){
 /*FUNCIÓN QUE IMPLEMENTA EL ALGORITMO DE BÚSQUEDA LINEAL*/
 /* Recibe: Arreglo de enteros A[], entero tamanio con el tamaño de A[] y entero x con el número a buscar	*/
 /* Devuelve: Entero (bandera para saber que no se encunetra o el índice si está) */
+/* Descripción: Busca posición por posición, de inicio a fin, el número a buscar */
 int linear_search(int A[], int tamanio, int x){
+	//recorre el arreglo de inicio a fin a menos que se encuentre el número antes de finalizar
     for (int i = 0; i < tamanio; i++)
         if (A[i] == x)
             return i;
