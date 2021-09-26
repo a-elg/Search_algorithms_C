@@ -20,7 +20,7 @@ CURSO: Análisis de algoritmos
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-//#include "tiempo.h"
+#include "tiempo.h"
 //*****************************************************************
 
 //DECLARACIÓN DE FUNCIONES (PROTOTIPOS)
@@ -45,10 +45,12 @@ int min(int x, int y);
 int main(int argc, char *argv[])
 {
     //Variables del main
-    int n; //Tamaño del arreglo
-    int x; //Numero a buscar
+    int n;        //Tamaño del arreglo
+    int x;        //Numero a buscar
     int *arreglo; //Arreglo que almacena los numeros ordenados en los que se buscara x
     int i, j;     //indices de ciclos
+                  //Variables para medición de tiempos
+    double utime0, stime0, wtime0, utime1, stime1, wtime1;
 
     /* RECEPCIÓN Y DECODIFICACIÓN DE ARGUMENTOS */
     //Condicional *if* se ejecuta en caso de no introducirse exactamente 3 argumentos (Cadena de ejecución,  cadena=n y cadena=x)
@@ -68,43 +70,41 @@ int main(int argc, char *argv[])
     //Llenado del arreglo
     for (i = 0; i < n; i++)
         scanf("%d", &arreglo[i]);
-//*****************************************************************
-	
-	//INICIAR EL CONTEO DEL TIEMPO PARA LAS EVALUACIONES DE RENDIMIENTO	
-	uswtime(&utime0, &stime0, &wtime0);
+    //*****************************************************************
 
-	//ALGORITMO	
-	//Llamada a la función del algoritmo
+    //INICIAR EL CONTEO DEL TIEMPO PARA LAS EVALUACIONES DE RENDIMIENTO
+    uswtime(&utime0, &stime0, &wtime0);
+
+    //ALGORITMO
+    //Llamada a la función del algoritmo
     printf("Encontrado en la posición: %d\t", fib_Search(arreglo, x, n));
-//EVALUAR LOS TIEMPOS DE EJECUCIÓN 
-	uswtime(&utime1, &stime1, &wtime1);
+    //EVALUAR LOS TIEMPOS DE EJECUCIÓN
+    uswtime(&utime1, &stime1, &wtime1);
 
-	/*
-	//Cálculo del tiempo de ejecución del programa
-	printf("\n");
-	printf("real (Tiempo total)  %.10f s\n",  wtime1 - wtime0);
-	printf("user (Tiempo de procesamiento en CPU) %.10f s\n",  utime1 - utime0);
-	printf("sys (Tiempo en acciónes de E/S)  %.10f s\n",  stime1 - stime0);
-	printf("CPU/Wall   %.10f %% \n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
-	printf("\n");
-	
-	//Mostrar los tiempos en formato exponecial
-	printf("\n");
-	printf("real (Tiempo total)  %.10e s\n",  wtime1 - wtime0);
-	printf("user (Tiempo de procesamiento en CPU) %.10e s\n",  utime1 - utime0);
-	printf("sys (Tiempo en acciónes de E/S)  %.10e s\n",  stime1 - stime0);
-	printf("CPU/Wall   %.10f %% \n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
-	printf("\n");
-	*/
+    //Cálculo del tiempo de ejecución del programa
+    printf("\n");
+    printf("real (Tiempo total)  %.10f s\n", wtime1 - wtime0);
+    printf("user (Tiempo de procesamiento en CPU) %.10f s\n", utime1 - utime0);
+    printf("sys (Tiempo en acciónes de E/S)  %.10f s\n", stime1 - stime0);
+    printf("CPU/Wall   %.10f %% \n", 100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
+    printf("\n");
 
-	//FORMATO PARA OBTENER TIEMPO DE EJECUCIÓN 
-	printf("Insrt %15.10e  %21.10e %21.10e %21.10f%% \n", wtime1 - wtime0,utime1 - utime0,stime1 - stime0,100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
+    //Mostrar los tiempos en formato exponecial
+    printf("\n");
+    printf("real (Tiempo total)  %.10e s\n", wtime1 - wtime0);
+    printf("user (Tiempo de procesamiento en CPU) %.10e s\n", utime1 - utime0);
+    printf("sys (Tiempo en acciónes de E/S)  %.10e s\n", stime1 - stime0);
+    printf("CPU/Wall   %.10f %% \n", 100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
+    printf("\n");
 
-	//Finaliza programa 
-	exit (0);	
+    //FORMATO PARA OBTENER TIEMPO DE EJECUCIÓN
+    printf("Insrt %15.10e  %21.10e %21.10e %21.10f%% \n", wtime1 - wtime0, utime1 - utime0, stime1 - stime0, 100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
+
+    //Finaliza programa
+    exit(0);
 }
 
-//DEFINICIÓN DE FUNCIONES 
+//DEFINICIÓN DE FUNCIONES
 //************************************************************************.
 /*FUNCIÓN QUE IMPLEMENTA EL ALGORITMO DE BÚSQUEDA DE FIBONACCI*/
 /*
