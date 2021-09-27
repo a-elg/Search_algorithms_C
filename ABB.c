@@ -40,7 +40,7 @@ nodo *raiz; //raiz del árbol
 //DECLARACIÓN DE FUNCIONES (PROTOTIPOS)
 /*prototipo para la función que crea un nodo (hoja) para ser insertado*/
 nodo* crearNodo(int dato); 
-/*prototipo para la función que inserta un valor en el árbol*/
+/*prototipo para la función que inserta un valor en el ABB*/
 void insertar(int dato); 
 /*prototipo para la función que busca el valor en el ABB generado*/
 int buscar(int dato); 
@@ -168,7 +168,7 @@ void insertar(int dato){
 }
 
 //FUNCIÓN QUE IMPLEMENTA EL ALGORITMO DE BÚSQUEDA en un árbol binario de búsqueda, recibe el dato a buscar
-//Devuelve un 1 si se encontró y un 0 si no se encontró.
+//Devuelve el número buscado si se encontró y un 0 si no se encontró.
 int buscar(int x){
 	int aux;//Variable para evitar calcular muchas veces nodo->valor
 	nodo* nodo_en_revision=raiz;
