@@ -104,7 +104,8 @@ int main (int argc, char* argv[]){
 /*FUNCIÓN QUE IMPLEMENTA EL ALGORITMO DE BÚSQUEDA EXPOENCIAL*/
 /* Recibe: Un arreglo A de los elementos, una varible n que indica el tamaño del arreglo y la variable x a buscar*/
 /* Devuelve: El indice donde se encuentra el elemento, -1 si no se encuentra*/ 
-/* Descripción:  */
+/* Descripción:  Este algoritmo busca el elemento en intervalos de tamaño de potencias de 2 y posteriormente aplica busqueda binaria
+dicho intervalo*/
 int exponential_search(int A[], int n, int x){
 	if(A[0] == x) //Se compara si el elemento esta en la primera posicion
 		return 0;
