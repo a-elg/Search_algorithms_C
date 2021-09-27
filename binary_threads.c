@@ -8,7 +8,7 @@ INTEGRANTES DEL EQUIPO:
     Martínez Martínez Fernando 
     Martínez Ortiz Fabiola Yahel	
   VERSIÓN: 1.0
-DESCRIPCIÓN: Implementación del algoritmo de búsqueda lineal con hilos. Mide el tiempo de ejecución del algoritmo. 
+DESCRIPCIÓN: Implementación del algoritmo de búsqueda binaria con hilos. Mide el tiempo de ejecución del algoritmo. 
 			Se toman los valores de entrada del archivo .txt con los 10 millones de números.
 
 CURSO: Análisis de algoritmos
@@ -20,6 +20,8 @@ CURSO: Análisis de algoritmos
 //LIBRERIAS INCLUIDAS
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <math.h>
 #include "tiempo.h"
 
 /*Librerías para el manejo de hilos*/
@@ -110,38 +112,32 @@ int main(int argc, const char **argv){
     return 0;
 }
 
-//DEFINICIÓN DE FUNCIONES 
-//************************************************************************
-
-/*FUNCIÓN QUE IMPLEMENTA EL PROCESO DEL ALGORITMO DE BÚSQUEDA LINEAL*/
-/* Recibe: Arreglo de datos tipo apuntador	*/
-/* Devuelve: Vacío */
-/* Descripción: Busca posición por posición, de inicio a fin, el número a buscar */
-void *thread_process(void *datos)
-{
+void *thread_process(void *datos){
     informacion *info = datos;
-    int i = info->inicio;
-    while (i < info->fin && posicion == -1) {
-        if (A[i] == x) {
-            posicion = i;
-        }
-        i++;
+
+    int anterior = info->inicio;
+    int siguiente = (info->fin) - 1;
+    int centro;
+
+    while (anterior <= siguiente && posicion == -1)    {
+        centro = anterior + (siguiente - anterior) / 2;
+        if (A[centro] == x)
+            posicion = centro;
+        if (A[centro] < x)
+            anterior = centro + 1;
+        else
+            siguiente = centro - 1;
     }
     pthread_exit(0);
 }
 
-/* FUNCIÓN QUE CREA LOS HILOS*/
-/* Recibe: tamaño del arreglo e índice a buscar	*/
-/* Devuelve: Vacío */
-/* Descripción: Crea los hilos de acuerdo a la variable global (max threads), 
-/* y llama al proceso del algoritmo para cada hilo de acuerdo a la estructura que guarda los índices de inicio a fin */
 int create_threads(int x, int n){
     int hilos = calc_hilos(n);
-    int actual = n / hilos;
+    int actual = n / hilos; 
     pthread_t threads[hilos];
     informacion *infos[hilos];
     int status, i, *exit_code;
-    for (i = 0; i < (hilos - 1); ++i) {
+    for (i = 0; i < (hilos - 1); ++i){
         infos[i] = malloc(sizeof(*infos[i]));
         infos[i]->inicio = (i * actual);
         infos[i]->fin = ((i + 1) * actual - 1);
@@ -151,6 +147,7 @@ int create_threads(int x, int n){
     infos[hilos - 1]->inicio = (i * actual);
     infos[hilos - 1]->fin = n;
     for (i = 0; i < hilos; ++i){
+
         status = pthread_create(&threads[i], NULL, thread_process, infos[i]);
         if (status){
             printf("\nError en thread %i\n", status);
@@ -164,10 +161,8 @@ int create_threads(int x, int n){
 }
 
 int calc_hilos(int n){
-    if (n < MAXTHREADS)
+    if (n == 1)
         return 1;
-    int module = (n % MAXTHREADS);
-    if (module == 0)
-        return MAXTHREADS;
-    return module;
+    int module = log2(n);
+    return (module == 0) ? MAXTHREADS : module;
 }
