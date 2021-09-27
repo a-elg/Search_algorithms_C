@@ -82,7 +82,7 @@ int main (int argc, char* argv[]){
 	//Llamada a la función del algoritmo
     result = buscar(x);
     //Valida el resultado para saber si se encontró o no el número
-    (result)
+    (result!=-1)
         ? printf("Elemento encontrado\n")
         : printf("Elemento no encontrado\n");
 
@@ -105,6 +105,7 @@ int main (int argc, char* argv[]){
 	printf("CPU/Wall   %.10f %% \n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
 	printf("\n");
 	*/
+
 
 	//FORMATO PARA OBTENER TIEMPO DE EJECUCIÓN 
 	printf("ABB %15.10e  %21.10e %21.10e %21.10f%% \n", wtime1 - wtime0,utime1 - utime0,stime1 - stime0,100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
@@ -174,7 +175,7 @@ int buscar(int x){
 	while (nodo_en_revision){//Cuando se vuelva null, el ciclo se cerrará
 		aux=nodo_en_revision->valor;
 		if(aux==x)
-			return 1;
+			return x;
 		else{
 			if(x>aux)//ir a rama derecha
 				nodo_en_revision=nodo_en_revision->h_derecho;
@@ -183,5 +184,5 @@ int buscar(int x){
 			}
 		}
 	}
-    return 0;
+    return -1;
 }
