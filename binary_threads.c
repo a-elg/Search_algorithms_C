@@ -49,7 +49,6 @@ int calc_hilos(int n);
 
 //PROGRAMA PRINCIPAL
 int main(int argc, const char **argv){
-    int *A;
 	int x = 0;
     int tam, result;
 	//Variables para ciclos
@@ -112,6 +111,13 @@ int main(int argc, const char **argv){
     return 0;
 }
 
+//DEFINICIÓN DE FUNCIONES 
+//************************************************************************
+
+/*FUNCIÓN QUE IMPLEMENTA EL PROCESO DEL ALGORITMO DE BÚSQUEDA LINEAL*/
+/* Recibe: Arreglo de datos tipo apuntador	*/
+/* Devuelve: Vacío */
+/* Descripción: Realiza algoritmo de búsqueda binaria con hilos */
 void *thread_process(void *datos){
     informacion *info = datos;
 
@@ -131,6 +137,11 @@ void *thread_process(void *datos){
     pthread_exit(0);
 }
 
+/* FUNCIÓN QUE CREA LOS HILOS*/
+/* Recibe: tamaño del arreglo e índice a buscar	*/
+/* Devuelve: Vacío */
+/* Descripción: Crea los hilos de acuerdo a la variable global (max threads), 
+/* y llama al proceso del algoritmo para cada hilo de acuerdo a la estructura que guarda los índices de inicio a fin */
 int create_threads(int x, int n){
     int hilos = calc_hilos(n);
     int actual = n / hilos; 
@@ -160,6 +171,11 @@ int create_threads(int x, int n){
     return 0;
 }
 
+/* FUNCIÓN QUE CALCULA EL NUMERO DE HILOS A CREAR/
+/* Recibe: tamaño del arreglo */
+/* Devuelve: Entero número de hilos */
+/* Descripción: Calcula en número de hilos de acuerdo a la variable
+    global MAXTHREADS, realizando una operación log entre este y el tamaño del arreglo */
 int calc_hilos(int n){
     if (n == 1)
         return 1;

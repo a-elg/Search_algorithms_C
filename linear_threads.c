@@ -16,7 +16,6 @@ CURSO: Análisis de algoritmos
     EJECUCIÓN: "./main n" (Linux y MAC OS)
 *****************************************************************/
 
- 
 //LIBRERIAS INCLUIDAS
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,7 +28,7 @@ CURSO: Análisis de algoritmos
 #include <pthread.h>
 //*****************************************************************
 
-#define MAXTHREADS 8
+#define THREADS 8
 
 typedef struct informacion {
     int inicio;
@@ -44,10 +43,10 @@ int x = 0;
 /*prototipo para la función que implementa el algoritmo de búsqueda lineal*/
 int create_threads(int x, int n);
 int calc_hilos(int n);
+void *thread_process(void *datos);
 
 //PROGRAMA PRINCIPAL
 int main(int argc, const char **argv){
-    int *A;
 	int x = 0;
     int tam, result;
 	//Variables para ciclos
@@ -65,7 +64,7 @@ int main(int argc, const char **argv){
             x = atoi(argv[2]); //Tomar el tercer argumento como el número a buscar
     }
 
-	//Asignacion de memoria dinamica para el A de numeros a ordenar
+	//Asignacion de memoria dinamica para el A de numeros
 	if ((A = malloc(sizeof(int) * tam)) == NULL)
 		perror("La asignacion dinamica no se realizo correctamente");
 	//Llenado del arreglo
@@ -117,8 +116,7 @@ int main(int argc, const char **argv){
 /* Recibe: Arreglo de datos tipo apuntador	*/
 /* Devuelve: Vacío */
 /* Descripción: Busca posición por posición, de inicio a fin, el número a buscar */
-void *thread_process(void *datos)
-{
+void *thread_process(void *datos){
     informacion *info = datos;
     int i = info->inicio;
     while (i < info->fin && posicion == -1) {
@@ -141,33 +139,41 @@ int create_threads(int x, int n){
     pthread_t threads[hilos];
     informacion *infos[hilos];
     int status, i, *exit_code;
-    for (i = 0; i < (hilos - 1); ++i) {
+    /* Asignación de memoria dinámica para las estructuras de cada hilo*/
+    for (i = 0; i < (hilos - 1); i++) {
         infos[i] = malloc(sizeof(*infos[i]));
         infos[i]->inicio = (i * actual);
         infos[i]->fin = ((i + 1) * actual - 1);
     }
 
     infos[hilos - 1] = malloc(sizeof(*infos[hilos]));
-    infos[hilos - 1]->inicio = (i * actual);
-    infos[hilos - 1]->fin = n;
-    for (i = 0; i < hilos; ++i){
+    infos[hilos - 1] -> inicio = (i * actual);
+    infos[hilos - 1] -> fin = n;
+    /*Asigna el proceso de búsqueda lienal a cada hilo*/
+    for (i = 0; i < hilos; i++){
         status = pthread_create(&threads[i], NULL, thread_process, infos[i]);
         if (status){
             printf("\nError en thread %i\n", status);
             exit(-1);
         }
     }
+    /*Espera a que cada hilo termine exitosamente su tarea*/
     for (i = 0; i < hilos; i++){
         pthread_join(threads[i], (void **)&exit_code);
     }
     return 0;
 }
 
+/* FUNCIÓN QUE CALCULA EL NUMERO DE HILOS A CREAR/
+/* Recibe: tamaño del arreglo */
+/* Devuelve: Entero número de hilos */
+/* Descripción: Calcula en número de hilos de acuerdo a la variable
+    global MAXTHREADS, realizando una operación modulo entre este y el tamaño del arreglo */
 int calc_hilos(int n){
-    if (n < MAXTHREADS)
+    if (n < THREADS)
         return 1;
-    int module = (n % MAXTHREADS);
+    int module = (n % THREADS);
     if (module == 0)
-        return MAXTHREADS;
+        return THREADS;
     return module;
 }
